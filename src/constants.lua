@@ -70,6 +70,14 @@ COLLIDABLE_TILES = {
 --
 -- game object IDs
 --
+KEY_IDS = {
+  1, 2, 3, 4
+}
+
+LOCK_IDS = {
+  1, 2, 3, 4
+}
+
 BUSH_IDS = {
     1, 2, 5, 6, 7
 }
