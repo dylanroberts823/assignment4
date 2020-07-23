@@ -89,10 +89,15 @@ function LevelMaker.generate(width, height)
                               x = (x - 1) * TILE_SIZE,
                               y = (4 - 1) * TILE_SIZE,
                               width = 16,
-                              height = 8,
+                              height = 16,
+                              consumable = true,
 
                               -- select keyColor frame
-                              frame = KEY_IDS[keyColor]
+                              frame = KEY_IDS[keyColor],
+
+                              onConsume = function(obj)
+                              end
+
                           }
                       )
                       keyIsGenerated = true
@@ -128,10 +133,15 @@ function LevelMaker.generate(width, height)
                         x = (x - 1) * TILE_SIZE,
                         y = (4 - 1) * TILE_SIZE,
                         width = 16,
-                        height = 8,
-
+                        height = 16,
+                        collidable = true,
+                        solid = true,
                         -- select keyColor frame
-                        frame = LOCK_IDS[lockColor]
+                        frame = LOCK_IDS[lockColor],
+
+                        -- collision function takes itself
+                        onCollide = function(obj)
+                        end
                     }
                 )
                 lockIsGenerated = true
