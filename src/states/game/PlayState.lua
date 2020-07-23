@@ -10,8 +10,6 @@ PlayState = Class{__includes = BaseState}
 function PlayState:enter(params)
     self.camX = 0
     self.camY = 0
-    self.level = LevelMaker.generate(60, 10)
-    self.tileMap = self.level.tileMap
     self.background = math.random(3)
     self.backgroundX = 0
 
@@ -19,6 +17,8 @@ function PlayState:enter(params)
     self.gravityAmount = 6
 
     if params == nil then
+      self.level = LevelMaker.generate(60, 10)
+      self.tileMap = self.level.tileMap
       self.player = Player({
           x = 0, y = 0,
           width = 16, height = 20,
@@ -36,19 +36,19 @@ function PlayState:enter(params)
       --Get the player from params
       self.player = params.player
 
-      --Reset the player to the beginning of the level
-      self.player.tileMap = self.tileMap
-      self.player.x = 0
-      self.player.y = 0
-
       --add a level bonus
       self.player.levelBonus = self.player.levelBonus + 1
 
-      --reset the level, with the bonus width
+      -- generate the level
       self.level = LevelMaker.generate(60 + 20 * self.player.levelBonus, 10)
+      self.tileMap = self.level.tileMap
 
-      --set the player level
+      --Reset the player to the beginning of the level
+      self.player.x = 0
+      self.player.y = 0
+      self.player.map = self.tileMap
       self.player.level = self.level
+
     end
 
     print(self.player.levelBonus)
