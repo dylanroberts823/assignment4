@@ -10,7 +10,7 @@ PlayState = Class{__includes = BaseState}
 function PlayState:enter(params)
     self.camX = 0
     self.camY = 0
-    self.level = LevelMaker.generate(100, 10)
+    self.level = LevelMaker.generate(60, 10)
     self.tileMap = self.level.tileMap
     self.background = math.random(3)
     self.backgroundX = 0
@@ -45,7 +45,7 @@ function PlayState:enter(params)
       self.player.levelBonus = self.player.levelBonus + 1
 
       --reset the level, with the bonus width
-      self.level = LevelMaker.generate(100 + 20 * self.player.levelBonus, 10)
+      self.level = LevelMaker.generate(60 + 20 * self.player.levelBonus, 10)
 
       --set the player level
       self.player.level = self.level
