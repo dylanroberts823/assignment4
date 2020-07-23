@@ -93,7 +93,7 @@ gFrames = {
     ['creatures'] = GenerateQuads(gTextures['creatures'], 16, 16),
     ['keys'] = GenerateQuads(gTextures['keys'], 16, 16),
     ['locks'] = GenerateQuads(gTextures['locks'], 16, 16),
-    ['poles'] = GeneratePoles(gTextures['poles'], 8, 64),
+    ['poles'] = GeneratePoles(gTextures['poles'], 16, 64),
     ['flags'] = GenerateFlags(gTextures['flags'], 32, 16),
 }
 

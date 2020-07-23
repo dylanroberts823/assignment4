@@ -40,7 +40,7 @@ function GeneratePoles(atlas, tilewidth, tileheight)
 
     local sheetCounter = 1
     local spritesheet = {}
-
+    print(#POLE_IDS)
     for y = 0, sheetHeight - 1 do
         for x = 0, (#POLE_IDS - 1) do
             spritesheet[sheetCounter] =
