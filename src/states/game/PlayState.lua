@@ -7,7 +7,7 @@
 
 PlayState = Class{__includes = BaseState}
 
-function PlayState:init()
+function PlayState:enter(params)
     self.camX = 0
     self.camY = 0
     self.level = LevelMaker.generate(100, 10)
@@ -18,19 +18,30 @@ function PlayState:init()
     self.gravityOn = true
     self.gravityAmount = 6
 
-    self.player = Player({
-        x = 0, y = 0,
-        width = 16, height = 20,
-        texture = 'green-alien',
-        stateMachine = StateMachine {
-            ['idle'] = function() return PlayerIdleState(self.player) end,
-            ['walking'] = function() return PlayerWalkingState(self.player) end,
-            ['jump'] = function() return PlayerJumpState(self.player, self.gravityAmount) end,
-            ['falling'] = function() return PlayerFallingState(self.player, self.gravityAmount) end
-        },
-        map = self.tileMap,
-        level = self.level
-    })
+    if params == nil then
+      self.player = Player({
+          x = 0, y = 0,
+          width = 16, height = 20,
+          texture = 'green-alien',
+          stateMachine = StateMachine {
+              ['idle'] = function() return PlayerIdleState(self.player) end,
+              ['walking'] = function() return PlayerWalkingState(self.player) end,
+              ['jump'] = function() return PlayerJumpState(self.player, self.gravityAmount) end,
+              ['falling'] = function() return PlayerFallingState(self.player, self.gravityAmount) end
+          },
+          map = self.tileMap,
+          level = self.level
+      })
+    else
+      --Get the player from params
+      self.player = params.player
+
+      --Reset the player to the beginning of the level
+      self.player.tileMap = self.tileMap
+      self.player.level = self.level
+      self.player.x = 0
+      self.player.y = 0
+    end
 
     self:spawnEnemies()
 

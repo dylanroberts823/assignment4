@@ -68,7 +68,8 @@ function LevelMaker.generate(width, height)
             end
 
             -- chance to generate a pillar
-            if math.random(8) == 1 then
+            -- except on the last box
+            if math.random(8) == 1 and x ~= width - 1 then
                 blockHeight = 2
 
                 -- chance to generate bush on pillar
@@ -150,14 +151,14 @@ function LevelMaker.generate(width, height)
                         -- collision function takes player
                         onCollide = function(player, object)
                           --TESTING REMOVE NOT
-                          if not hasKey then
-                          --play the sound to indicate in key
-                          gSounds['pickup']:play()
-                          table.remove(objects, lockPosition)
+                            if not hasKey then
+                            --play the sound to indicate in key
+                            gSounds['pickup']:play()
+                            table.remove(objects, lockPosition)
 
 
-                          -- maintain reference so we can set it to nil
-                          local pole = GameObject {
+                            -- maintain reference so we can set it to nil
+                            local pole = GameObject {
                               texture = 'poles',
                               --TESTING
                               x = (width - 1) * TILE_SIZE,
@@ -169,8 +170,8 @@ function LevelMaker.generate(width, height)
                               frame = POLE_IDS[poleColor],
 
                               onCollide = function(player, object)
-                                  gSounds['pickup']:play()
-                                  player.score = player.score + 200
+                                gSounds['pickup']:play()
+                                player.score = player.score + 200
                               end
                             }
                             table.insert(objects, pole)
@@ -187,10 +188,12 @@ function LevelMaker.generate(width, height)
                                 frame = FLAG_IDS[flagColor],
 
                                 onConsume = function(player, object)
+                                  print(player.score)
+                                  gStateMachine:change('play', {player = player})
                                 end
                               }
                               table.insert(objects, flag)
-                          end
+                            end
                         end
                     }
                 )
