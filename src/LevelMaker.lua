@@ -52,7 +52,7 @@ function LevelMaker.generate(width, height)
 
         -- chance to just be emptiness
         --don't let emptiness be last box
-        if math.random(7) == 1 and x ~= width - 1 then
+        if math.random(7) == 1 and x ~= width then
           for y = 7, height do
               table.insert(tiles[y],
                   Tile(x, y, tileID, nil, tileset, topperset))
@@ -69,7 +69,7 @@ function LevelMaker.generate(width, height)
 
             -- chance to generate a pillar
             -- except on the last box
-            if math.random(8) == 1 and x ~= width - 1 then
+            if math.random(8) == 1 and x ~= width then
                 blockHeight = 2
 
                 -- chance to generate bush on pillar
@@ -151,7 +151,7 @@ function LevelMaker.generate(width, height)
                         -- collision function takes player
                         onCollide = function(player, object)
                           --TESTING REMOVE NOT
-                            if not hasKey then
+                          if hasKey then
                             --play the sound to indicate in key
                             gSounds['pickup']:play()
                             table.remove(objects, lockPosition)

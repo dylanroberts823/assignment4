@@ -30,7 +30,7 @@ function PlayState:enter(params)
               ['falling'] = function() return PlayerFallingState(self.player, self.gravityAmount) end
           },
           map = self.tileMap,
-          level = self.level
+          level = self.level,
       })
     else
       --Get the player from params
@@ -38,11 +38,20 @@ function PlayState:enter(params)
 
       --Reset the player to the beginning of the level
       self.player.tileMap = self.tileMap
-      self.player.level = self.level
       self.player.x = 0
       self.player.y = 0
+
+      --add a level bonus
+      self.player.levelBonus = self.player.levelBonus + 1
+
+      --reset the level, with the bonus width
+      self.level = LevelMaker.generate(100 + 20 * self.player.levelBonus, 10)
+
+      --set the player level
+      self.player.level = self.level
     end
 
+    print(self.player.levelBonus)
     self:spawnEnemies()
 
     --check if the tiles below him include any ground
