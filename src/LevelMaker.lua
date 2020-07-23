@@ -25,6 +25,7 @@ function LevelMaker.generate(width, height)
     local keyColor = math.random(#KEY_IDS)
     local lockColor = keyColor
     local hasKey = false
+    local lockPosition = 0
 
     -- whether we should draw our tiles with toppers
     local topper = true
@@ -133,7 +134,7 @@ function LevelMaker.generate(width, height)
                 table.insert(objects,
                     GameObject {
                         texture = 'locks',
-                        x = (x - 1) * TILE_SIZE,
+                        x = 1 * TILE_SIZE,
                         y = (4 - 1) * TILE_SIZE,
                         width = 16,
                         height = 16,
@@ -143,12 +144,13 @@ function LevelMaker.generate(width, height)
                         frame = LOCK_IDS[lockColor],
 
                         -- collision function takes player
-                        onCollide = function(player, obj)
-                          print(hasKey)
-                          if hasKey then
+                        onCollide = function(player, object)
+                          --TESTING REMOVE NOT
+                          if not hasKey then
                             --play the sound to indicate in key
                             gSounds['pickup']:play()
-                            table.remove(objects, obj)
+                            table.remove(objects, lockPosition)
+
 
                             -- maintain reference so we can set it to nil
                             local flag = GameObject {
@@ -172,6 +174,7 @@ function LevelMaker.generate(width, height)
                 )
                 lockIsGenerated = true
               end
+              lockPosition = #objects
             end
 
             -- chance to spawn a block
@@ -193,7 +196,7 @@ function LevelMaker.generate(width, height)
                         solid = true,
 
                         -- collision function takes itself
-                        onCollide = function(obj)
+                        onCollide = function(player, obj)
 
                             -- spawn a gem if we haven't already hit the block
                             if not obj.hit then
