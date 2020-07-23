@@ -27,6 +27,9 @@ function LevelMaker.generate(width, height)
     local hasKey = false
     local lockPosition = 0
 
+    local poleColor = math.random(#POLE_IDS)
+    local flagColor = math.random(#FLAG_IDS)
+
     -- whether we should draw our tiles with toppers
     local topper = true
     local tileset = math.random(20)
@@ -49,9 +52,12 @@ function LevelMaker.generate(width, height)
 
         -- chance to just be emptiness
         if math.random(7) == 1 then
-            for y = 7, height do
-                table.insert(tiles[y],
-                    Tile(x, y, tileID, nil, tileset, topperset))
+            --don't let emptiness be last box
+            if x ~= width -1 then
+              for y = 7, height do
+                  table.insert(tiles[y],
+                      Tile(x, y, tileID, nil, tileset, topperset))
+              end
             end
         else
             tileID = TILE_ID_GROUND
@@ -147,27 +153,45 @@ function LevelMaker.generate(width, height)
                         onCollide = function(player, object)
                           --TESTING REMOVE NOT
                           if not hasKey then
-                            --play the sound to indicate in key
-                            gSounds['pickup']:play()
-                            table.remove(objects, lockPosition)
+                          --play the sound to indicate in key
+                          gSounds['pickup']:play()
+                          table.remove(objects, lockPosition)
 
 
-                            -- maintain reference so we can set it to nil
-                            local flag = GameObject {
-                                texture = 'flags',
-                                x = width * TILE_SIZE,
-                                y = (6 - 1) * TILE_SIZE,
-                                width = 16,
-                                height = 16,
-                                collidable = true,
-                                -- select frame
-                                frame = LOCK_IDS[lockColor],
+                          -- maintain reference so we can set it to nil
+                          local pole = GameObject {
+                              texture = 'poles',
+                              --TESTING
+                              x = (5 - 1) * TILE_SIZE,
+                              y = (4 - 1) * TILE_SIZE,
+                              width = 16,
+                              height = 48,
+                              collidable = true,
+                              -- select frame
+                              frame = POLE_IDS[poleColor],
 
-                                onCollide = function(player, object)
-                                    gSounds['pickup']:play()
-                                    player.score = player.score + 200
-                                end
+                              onCollide = function(player, object)
+                                  gSounds['pickup']:play()
+                                  player.score = player.score + 200
+                              end
                             }
+                            table.insert(objects, pole)
+
+                            -- -- maintain reference so we can set it to nil
+                            -- local flag = GameObject {
+                            --     texture = 'flags',
+                            --     x = (width - 1) * TILE_SIZE,
+                            --     y = (6 - 1) * TILE_SIZE,
+                            --     width = 16,
+                            --     height = 16,
+                            --     consumable = true,
+                            --     -- select frame
+                            --     frame = FLAG_IDS[flagColor],
+                            --
+                            --     onConsume = function(player, object)
+                            --     end
+                            --   }
+                            --   table.insert(objects, flag)
                           end
                         end
                     }

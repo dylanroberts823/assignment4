@@ -75,7 +75,15 @@ KEY_IDS = {
 }
 
 LOCK_IDS = {
-  5, 6, 7, 8 
+  5, 6, 7, 8
+}
+
+POLE_IDS = {
+  1, 2, 3, 4, 5, 6
+}
+
+FLAG_IDS = {
+  1, 2, 3, 4
 }
 
 BUSH_IDS = {

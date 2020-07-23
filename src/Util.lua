@@ -34,6 +34,47 @@ function GenerateQuads(atlas, tilewidth, tileheight)
     return spritesheet
 end
 
+function GeneratePoles(atlas, tilewidth, tileheight)
+    local sheetWidth = atlas:getWidth() / tilewidth
+    local sheetHeight = atlas:getHeight() / tileheight
+
+    local sheetCounter = 1
+    local spritesheet = {}
+
+    for y = 0, sheetHeight - 1 do
+        for x = 0, (#POLE_IDS - 1) do
+            spritesheet[sheetCounter] =
+                love.graphics.newQuad(x * tilewidth, y * tileheight, tilewidth,
+                tileheight, atlas:getDimensions())
+            sheetCounter = sheetCounter + 1
+        end
+    end
+
+    return spritesheet
+end
+
+function GenerateFlags(atlas, tilewidth, tileheight)
+    local sheetWidth = atlas:getWidth() / tilewidth
+    local sheetHeight = atlas:getHeight() / tileheight
+
+    local sheetCounter = 1
+    local spritesheet = {}
+
+    local numFlags = 4
+    local flagOffset = 48
+
+    for y = 0, sheetHeight - 1 do
+        for x = flagOffset, (numFlags - 1) do
+            spritesheet[sheetCounter] =
+                love.graphics.newQuad(x * tilewidth, y * tileheight, tilewidth,
+                tileheight, atlas:getDimensions())
+            sheetCounter = sheetCounter + 1
+        end
+    end
+
+    return spritesheet
+end
+
 --[[
     Divides quads we've generated via slicing our tile sheet into separate tile sets.
 ]]
@@ -46,7 +87,7 @@ function GenerateTileSets(quads, setsX, setsY, sizeX, sizeY)
     -- for each tile set on the X and Y
     for tilesetY = 1, setsY do
         for tilesetX = 1, setsX do
-            
+
             -- tileset table
             table.insert(tilesets, {})
             tableCounter = tableCounter + 1
