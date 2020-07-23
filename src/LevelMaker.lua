@@ -11,6 +11,7 @@
 LevelMaker = Class{}
 
 function LevelMaker.generate(width, height)
+    ::resetMap::
     local tiles = {}
     local entities = {}
     local objects = {}
@@ -19,7 +20,7 @@ function LevelMaker.generate(width, height)
 
     local keyIsGenerated = false
     --TESTING for True
-    local lockIsGenerated = true
+    local lockIsGenerated = false
 
     local keyColor = math.random(#KEY_IDS)
     local lockColor = keyColor
@@ -80,7 +81,7 @@ function LevelMaker.generate(width, height)
                     )
                 end
                 -- chance to generate key on pillar
-                if keyIsGenerated == false then
+                if not keyIsGenerated then
                   if math.random(8) == 1 then
                       table.insert(objects,
                           GameObject {
@@ -116,6 +117,25 @@ function LevelMaker.generate(width, height)
                         collidable = false
                     }
                 )
+            end
+
+            -- chance to generate lock on pillar
+            if not lockIsGenerated then
+              if math.random(25) == 1 then
+                table.insert(objects,
+                    GameObject {
+                        texture = 'locks',
+                        x = (x - 1) * TILE_SIZE,
+                        y = (4 - 1) * TILE_SIZE,
+                        width = 16,
+                        height = 8,
+
+                        -- select keyColor frame
+                        frame = LOCK_IDS[lockColor]
+                    }
+                )
+                lockIsGenerated = true
+              end
             end
 
             -- chance to spawn a block
@@ -191,6 +211,6 @@ function LevelMaker.generate(width, height)
     if (keyIsGenerated and lockIsGenerated) then
       return GameLevel(entities, objects, map)
     else
-      LevelMaker.generate(width, height)
+      goto resetMap
     end
 end
