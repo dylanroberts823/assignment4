@@ -40,7 +40,6 @@ function GeneratePoles(atlas, tilewidth, tileheight)
 
     local sheetCounter = 1
     local spritesheet = {}
-    print(#POLE_IDS)
     for y = 0, sheetHeight - 1 do
         for x = 0, (#POLE_IDS - 1) do
             spritesheet[sheetCounter] =
@@ -61,15 +60,13 @@ function GenerateFlags(atlas, tilewidth, tileheight)
     local spritesheet = {}
 
     local numFlags = 4
-    local flagOffset = 48
+    local flagOffset = 96
 
     for y = 0, sheetHeight - 1 do
-        for x = flagOffset, (numFlags - 1) do
-            spritesheet[sheetCounter] =
-                love.graphics.newQuad(x * tilewidth, y * tileheight, tilewidth,
-                tileheight, atlas:getDimensions())
-            sheetCounter = sheetCounter + 1
-        end
+      spritesheet[sheetCounter] =
+        love.graphics.newQuad(flagOffset, y * tileheight, tilewidth,
+        tileheight, atlas:getDimensions())
+      sheetCounter = sheetCounter + 1
     end
 
     return spritesheet

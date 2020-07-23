@@ -177,21 +177,21 @@ function LevelMaker.generate(width, height)
                             }
                             table.insert(objects, pole)
 
-                            -- -- maintain reference so we can set it to nil
-                            -- local flag = GameObject {
-                            --     texture = 'flags',
-                            --     x = (width - 1) * TILE_SIZE,
-                            --     y = (6 - 1) * TILE_SIZE,
-                            --     width = 16,
-                            --     height = 16,
-                            --     consumable = true,
-                            --     -- select frame
-                            --     frame = FLAG_IDS[flagColor],
-                            --
-                            --     onConsume = function(player, object)
-                            --     end
-                            --   }
-                            --   table.insert(objects, flag)
+                            -- maintain reference so we can set it to nil
+                            local flag = GameObject {
+                                texture = 'flags',
+                                x = (5 - 1) * TILE_SIZE,
+                                y = (4 - 1) * TILE_SIZE,
+                                width = 64,
+                                height = 16,
+                                consumable = true,
+                                -- select frame
+                                frame = FLAG_IDS[flagColor],
+
+                                onConsume = function(player, object)
+                                end
+                              }
+                              table.insert(objects, flag)
                           end
                         end
                     }
