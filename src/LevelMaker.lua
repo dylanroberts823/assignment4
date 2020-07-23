@@ -24,6 +24,7 @@ function LevelMaker.generate(width, height)
 
     local keyColor = math.random(#KEY_IDS)
     local lockColor = keyColor
+    local hasKey = false
 
     -- whether we should draw our tiles with toppers
     local topper = true
@@ -95,7 +96,9 @@ function LevelMaker.generate(width, height)
                               -- select keyColor frame
                               frame = KEY_IDS[keyColor],
 
-                              onConsume = function(obj)
+                              onConsume = function(player, object)
+                                hasKey = true
+                                gSounds['pickup']:play()
                               end
 
                           }
@@ -139,8 +142,31 @@ function LevelMaker.generate(width, height)
                         -- select keyColor frame
                         frame = LOCK_IDS[lockColor],
 
-                        -- collision function takes itself
-                        onCollide = function(obj)
+                        -- collision function takes player
+                        onCollide = function(player, obj)
+                          print(hasKey)
+                          if hasKey then
+                            --play the sound to indicate in key
+                            gSounds['pickup']:play()
+                            table.remove(objects, obj)
+
+                            -- maintain reference so we can set it to nil
+                            local flag = GameObject {
+                                texture = 'flags',
+                                x = width * TILE_SIZE,
+                                y = (6 - 1) * TILE_SIZE,
+                                width = 16,
+                                height = 16,
+                                collidable = true,
+                                -- select frame
+                                frame = LOCK_IDS[lockColor],
+
+                                onCollide = function(player, object)
+                                    gSounds['pickup']:play()
+                                    player.score = player.score + 200
+                                end
+                            }
+                          end
                         end
                     }
                 )
