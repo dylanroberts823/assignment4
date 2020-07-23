@@ -162,7 +162,7 @@ function LevelMaker.generate(width, height)
                           local pole = GameObject {
                               texture = 'poles',
                               --TESTING
-                              x = (5 - 1) * TILE_SIZE,
+                              x = (width - 1) * TILE_SIZE,
                               y = (4 - 1) * TILE_SIZE,
                               width = 16,
                               height = 48,
@@ -180,7 +180,7 @@ function LevelMaker.generate(width, height)
                             -- maintain reference so we can set it to nil
                             local flag = GameObject {
                                 texture = 'flags',
-                                x = (5 - 1) * TILE_SIZE,
+                                x = (width - 3) * TILE_SIZE,
                                 y = (4 - 1) * TILE_SIZE,
                                 width = 64,
                                 height = 16,
