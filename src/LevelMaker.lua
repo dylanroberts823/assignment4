@@ -19,7 +19,6 @@ function LevelMaker.generate(width, height)
     local tileID = TILE_ID_GROUND
 
     local keyIsGenerated = false
-    --TESTING for True
     local lockIsGenerated = false
 
     local keyColor = math.random(#KEY_IDS)
@@ -133,75 +132,6 @@ function LevelMaker.generate(width, height)
                 )
             end
 
-            -- chance to generate lock on pillar
-            if not lockIsGenerated then
-              if math.random(25) == 1 then
-                table.insert(objects,
-                    GameObject {
-                        texture = 'locks',
-                        x = x * TILE_SIZE,
-                        y = (4 - 1) * TILE_SIZE,
-                        width = 16,
-                        height = 16,
-                        collidable = true,
-                        solid = true,
-                        -- select keyColor frame
-                        frame = LOCK_IDS[lockColor],
-
-                        -- collision function takes player
-                        onCollide = function(player, object)
-                          --TESTING REMOVE NOT
-                          if hasKey then
-                            --play the sound to indicate in key
-                            gSounds['pickup']:play()
-                            table.remove(objects, lockPosition)
-
-
-                            -- maintain reference so we can set it to nil
-                            local pole = GameObject {
-                              texture = 'poles',
-                              --TESTING
-                              x = (width - 1) * TILE_SIZE,
-                              y = (4 - 1) * TILE_SIZE,
-                              width = 16,
-                              height = 48,
-                              collidable = true,
-                              -- select frame
-                              frame = POLE_IDS[poleColor],
-
-                              onCollide = function(player, object)
-                                gSounds['pickup']:play()
-                                player.score = player.score + 200
-                              end
-                            }
-                            table.insert(objects, pole)
-
-                            -- maintain reference so we can set it to nil
-                            local flag = GameObject {
-                                texture = 'flags',
-                                x = (width - 3) * TILE_SIZE,
-                                y = (4 - 1) * TILE_SIZE,
-                                width = 64,
-                                height = 16,
-                                consumable = true,
-                                -- select frame
-                                frame = FLAG_IDS[flagColor],
-
-                                onConsume = function(player, object)
-                                  print(player.score)
-                                  gStateMachine:change('play', {player = player})
-                                end
-                              }
-                              table.insert(objects, flag)
-                            end
-                        end
-                    }
-                )
-                lockIsGenerated = true
-              end
-              lockPosition = #objects
-            end
-
             -- chance to spawn a block
             if math.random(10) == 1 then
                 table.insert(objects,
@@ -264,6 +194,72 @@ function LevelMaker.generate(width, height)
                         end
                     }
                 )
+
+            -- chance to generate lock
+            elseif not lockIsGenerated then
+              if math.random(25) == 1 then
+                lockPosition = #objects + 1
+                table.insert(objects,
+                    GameObject {
+                        texture = 'locks',
+                        x = x * TILE_SIZE,
+                        y = (4 - 1) * TILE_SIZE,
+                        width = 16,
+                        height = 16,
+                        collidable = true,
+                        solid = true,
+                        -- select keyColor frame
+                        frame = LOCK_IDS[lockColor],
+
+                        -- collision function takes player
+                        onCollide = function(player, object)
+                          if hasKey then
+                            --play the sound to indicate in key
+                            gSounds['pickup']:play()
+                            object.x = width
+
+
+                            -- maintain reference so we can set it to nil
+                            local pole = GameObject {
+                              texture = 'poles',
+                              --TESTING
+                              x = (width - 1) * TILE_SIZE,
+                              y = (4 - 1) * TILE_SIZE,
+                              width = 16,
+                              height = 48,
+                              collidable = true,
+                              -- select frame
+                              frame = POLE_IDS[poleColor],
+
+                              onCollide = function(player, object)
+                                gSounds['pickup']:play()
+                                player.score = player.score + 200
+                              end
+                            }
+                            table.insert(objects, pole)
+
+                            -- maintain reference so we can set it to nil
+                            local flag = GameObject {
+                                texture = 'flags',
+                                x = (width - 3) * TILE_SIZE,
+                                y = (4 - 1) * TILE_SIZE,
+                                width = 64,
+                                height = 16,
+                                consumable = true,
+                                -- select frame
+                                frame = FLAG_IDS[flagColor],
+
+                                onConsume = function(player, object)
+                                  gStateMachine:change('play', {player = player})
+                                end
+                              }
+                              table.insert(objects, flag)
+                            end
+                        end
+                    }
+                )
+                lockIsGenerated = true
+              end
             end
         end
     end
@@ -276,5 +272,6 @@ function LevelMaker.generate(width, height)
       return GameLevel(entities, objects, map)
     else
       goto resetMap
+      print("goto")
     end
 end
