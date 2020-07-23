@@ -51,14 +51,12 @@ function LevelMaker.generate(width, height)
         end
 
         -- chance to just be emptiness
-        if math.random(7) == 1 then
-            --don't let emptiness be last box
-            if x ~= width -1 then
-              for y = 7, height do
-                  table.insert(tiles[y],
-                      Tile(x, y, tileID, nil, tileset, topperset))
-              end
-            end
+        --don't let emptiness be last box
+        if math.random(7) == 1 and x ~= width - 1 then
+          for y = 7, height do
+              table.insert(tiles[y],
+                  Tile(x, y, tileID, nil, tileset, topperset))
+          end
         else
             tileID = TILE_ID_GROUND
 
@@ -140,7 +138,7 @@ function LevelMaker.generate(width, height)
                 table.insert(objects,
                     GameObject {
                         texture = 'locks',
-                        x = 1 * TILE_SIZE,
+                        x = x * TILE_SIZE,
                         y = (4 - 1) * TILE_SIZE,
                         width = 16,
                         height = 16,
